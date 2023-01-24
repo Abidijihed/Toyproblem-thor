@@ -1,8 +1,8 @@
 /**
-  * Implement a `DFSelect` method on this Tree class.
+  * Implement a `BFSelect` method on this Tree class.
   *
-  * DFSelect accepts a filter function, calls that function on each of the nodes
-  * in Depth First order, and returns a flat array of node values of the tree
+  * BFSelect accepts a filter function, calls that function on each of the nodes
+  * in Breadth First order, and returns a flat array of node values of the tree
   * for which the filter returns true.
   *
   * Example:
@@ -13,55 +13,64 @@
   *   var leaf5 = branch2.addChild(5);
   *   var leaf6 = branch3.addChild(6);
   *   var leaf7 = branch3.addChild(7);
-  *   root1.DFSelect(function (value, depth) {
+  *   root1.BFSelect(function (value, depth) {
   *     return value % 2;
   *   })
-  *   // [1, 5, 3, 7]
+  *   // [1, 3, 5, 7]
   *
-  *   root1.DFSelect(function (value, depth) {
+  *   root1.BFSelect(function (value, depth) {
   *     return depth === 1;
   *   })
   *   // [2, 3]
-  *
   */
 
-// Breadth-first search: uses a queue. Don't use this method for a massive tree
-// Depth-first search: doesn't have to keep track (w/ a queue) of all nodes
+/* START SOLUTION */
 
-Tree.prototype.DFSelect = function(filter) {
-  var results = [];
-
-  var DFSearch = function(node, depth) {
-    if (filter(node.value, depth)) {
-      results.push(node.value);
-    }
-    for (var i=0; i<node.children.length; i++) {
-      var child = node.children[i];
-      DFSearch(child, depth + 1);
-    }
+var Tree = function(value){
+    this.value = value;
+    this.children = [];
+  };
+  
+  Tree.prototype.BFSelect = function(filter) {
+    // return an array of values for which the function filter(value, depth) returns true
+   
+    return results;
   }
-  DFSearch(this, 0);
-
-  return results;
-};
   
- 
+  var Queue = function() {
+    var storage = [];
   
+    this.push = function(item) {
+      storage.push(item);
+    };
+  
+    this.pop = function() {
+      return storage.shift();
+    };
+  };
+  /* END SOLUTION */
+  
+  /**
+    * add an immediate child
+    * (wrap values in Tree nodes if they're not already)
+    */
   Tree.prototype.addChild = function(child){
     if (!child || !(child instanceof Tree)){
       child = new Tree(child);
     }
+  
     if(!this.isDescendant(child)){
       this.children.push(child);
-    }else {
+    } else {
       throw new Error("That child is already a child of this tree");
     }
     // return the new child node for convenience
     return child;
   };
+  
   /**
     * check to see if the provided tree is already a child of this
-    * tree __or any of its sub trees__
+    * tree, or any of its sub trees
     */
   Tree.prototype.isDescendant = function(child){
     if(this.children.indexOf(child) !== -1){
@@ -77,6 +86,7 @@ Tree.prototype.DFSelect = function(filter) {
       return false;
     }
   };
+  
   /**
     * remove an immediate child
     */
@@ -98,6 +108,6 @@ Tree.prototype.DFSelect = function(filter) {
   var leaf6 = branch3.addChild(6);
   var leaf7 = branch3.addChild(7);
   
-  console.log(root1.DFSelect(function (value, depth) {
+  console.log(root1.BFSelect(function (value, depth) {
     return value % 2;
   }));
